@@ -14,15 +14,15 @@ public class TokenAuthentication extends AbstractAuthenticationToken {
     
     private final UUID userId;
 
-    private final String mobileNumber;
+    private final String mobile;
 
     private final String role;
 
-    public TokenAuthentication(String token, UUID userId, String mobileNumber, String role, Collection<? extends GrantedAuthority> authorities) {
+    public TokenAuthentication(String token, UUID userId, String mobile, String role, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.token = token;
         this.userId = userId;
-        this.mobileNumber = mobileNumber;
+        this.mobile = mobile;
         this.role = role;
         setAuthenticated(true);
     }
@@ -60,7 +60,7 @@ public class TokenAuthentication extends AbstractAuthenticationToken {
     	return userId;
     }
 
-    public String getMobileNumber() { return mobileNumber; }
+    public String getmobile() { return mobile; }
 
     public String getRole() { return role; }
 }

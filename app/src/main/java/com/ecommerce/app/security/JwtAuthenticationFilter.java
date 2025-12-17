@@ -53,12 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				
 				if (jwtService.validateToken(token, jwtService.getAccessSignKey())) {
 					String userId = jwtService.extractUserId(token, jwtService.getAccessSignKey());
-					String mobileNumber = jwtService.extractPhoneNumber(token, jwtService.getAccessSignKey());
+					String mobile = jwtService.extractPhoneNumber(token, jwtService.getAccessSignKey());
 					String role = jwtService.extractRole(token, jwtService.getAccessSignKey());
 					
-					if (userId != null && mobileNumber != null && role != null) {
+					if (userId != null && mobile != null && role != null) {
 						SecurityContextHolder.getContext().setAuthentication(
-							new TokenAuthentication(token, UUID.fromString(userId), mobileNumber, role, 
+							new TokenAuthentication(token, UUID.fromString(userId), mobile, role, 
 								AuthorityUtils.NO_AUTHORITIES)
 						);
 						filterChain.doFilter(request, response);

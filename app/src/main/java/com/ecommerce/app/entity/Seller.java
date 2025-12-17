@@ -53,11 +53,11 @@ public class Seller extends AuditModel {
     @Column(name = "seller_code", nullable = false, length = 10)
     private String sellerCode;
 
-    @Column(name = "is_active", columnDefinition = "boolean default true")
-    private boolean isActive;
+    @Column(name = "is_active")
+    private boolean isActive = true;
 
     @Column(name = "rating", nullable = false)
-    private double rating;
+    private double rating = 0.0;
 
     @Column(name = "city", nullable = false, length = 100)
     private String city;

@@ -27,6 +27,10 @@ public class CommonUtils {
 	private static final Logger LOGGER = LogManager.getLogger(CommonUtils.class);
 
 	private static final String MOBILE_REGEX = "^\\d{10}$";
+	private static final String NAME_REGEX = "^[a-zA-Z]{1,50}$";
+	private static final String NAME_SPACE_REGEX = "^[a-zA-Z\\s]+$";
+	private static final String PINCODE_REGEX = "^[0-9]{6}$";
+	private static final String EMAIL_REGEX = "^(?=.{1,40}$)[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}$";
 
 
     public static ResponseEntity<Object> buildResponseEntity(ApiSuccess apiSuccess) {
@@ -84,10 +88,9 @@ public class CommonUtils {
         }
     }
 
-    public static void validateMobileNumber(String mobile) throws EcomException {
+    public static void validatemobile(String mobile, String field) throws EcomException {
 		if (!mobile.matches(MOBILE_REGEX)) {
-			throw new EcomException(ErrorInfo.INVALID_MOBILE_NUMBER.getErrorText(),
-					ErrorInfo.INVALID_MOBILE_NUMBER.getErrorCode());
+			throw new EcomException(field + " is invalid", ErrorInfo.INVALID_REQUEST.getErrorCode());
 		}
     }
 
@@ -110,5 +113,38 @@ public class CommonUtils {
 	    }
 	    return userId;
 	}
+
+	public static void validateName(String name) throws EcomException {
+		if(!name.matches(NAME_REGEX)) {
+			throw new EcomException("Name must contain only alphabets and be between 1 and 50 characters", 
+			ErrorInfo.INVALID_REQUEST.getErrorCode());
+		}
+	}
+	public static void validateEmail(String email, String field) throws EcomException {
+		if(!email.matches(EMAIL_REGEX)){
+			throw new EcomException(field + " is invalid", ErrorInfo.INVALID_REQUEST.getErrorCode());
+		}
+	}
+	
+	public static void validatePassword(String password) throws EcomException {
+		if(password.length() < 6 || password.length() > 32) {
+			throw new EcomException("Password must be between 6 and 32 characters", ErrorInfo.INVALID_REQUEST.getErrorCode());
+		}
+	}
+
+	public static void validatePincode(String pinCode, String field) throws EcomException {
+		if (!pinCode.matches(PINCODE_REGEX)) {
+			throw new EcomException(field + " is invalid", ErrorInfo.INVALID_REQUEST.getErrorCode());
+		}
+	}
+
+    public static void validateString(String value, String field, int maxLength) throws EcomException {
+		if(!value.matches(NAME_SPACE_REGEX)) {
+			throw new EcomException(field + " must contain only alphabets and space", ErrorInfo.INVALID_REQUEST.getErrorCode());
+		}
+        if(value.length() > maxLength) {
+            throw new EcomException(field + " must be less than " + maxLength + " characters", ErrorInfo.INVALID_REQUEST.getErrorCode());
+        }
+    }
     
 }

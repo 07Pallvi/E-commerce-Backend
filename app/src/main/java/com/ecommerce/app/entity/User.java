@@ -35,8 +35,8 @@ public class User extends AuditModel {
 	@Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "mobile_number", nullable = false, unique = true)
-    private String mobileNumber;
+    @Column(name = "mobile", nullable = false, unique = true)
+    private String mobile;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -46,8 +46,8 @@ public class User extends AuditModel {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
     
-    @Column(name = "is_active", columnDefinition = "boolean default true")
-    private boolean isActive;
+    @Column(name = "is_active")
+    private boolean isActive = true;
 
     @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
@@ -59,7 +59,7 @@ public class User extends AuditModel {
 	@JsonIgnore
 	private LocalDateTime lastLoggedIn;
 
-    @Column(name = "address_updated", columnDefinition = "boolean default false")
-    private boolean addressUpdated;
+    @Column(name = "address_updated")
+    private boolean addressUpdated = false;
     
 }

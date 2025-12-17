@@ -7,6 +7,9 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;	
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,8 +19,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,16 @@ public abstract class AuditModel implements Serializable {
 	@LastModifiedDate
 	@UpdateTimestamp
 	protected LocalDateTime updatedAt;
+
+	@Column(name = "created_by", nullable = false, updatable = true)
+    @JsonIgnore
+    @CreatedBy
+    public String createdBy;
+
+	@Column(name = "updated_by", nullable = false, updatable = true)
+    @JsonIgnore
+    @LastModifiedBy
+    public String updatedBy;
 
 	public LocalDateTime getCreatedAtIST() {
 		return convertToIST(this.createdAt);

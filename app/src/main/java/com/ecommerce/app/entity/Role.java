@@ -47,11 +47,11 @@ public class Role extends AuditModel  {
     @Convert(converter = PermissionConverter.class)
     private List<Permission> permissions = new ArrayList<>();
 
-    @Column(name = "is_active", columnDefinition = "boolean default false")
-	private boolean isActive;
+    @Column(name = "is_active")
+	private boolean isActive = true;
 
-    @Column(name = "has_all_permissions", columnDefinition = "boolean default false")
-	private boolean hasAllPermissions;
+    @Column(name = "has_all_permissions")
+	private boolean hasAllPermissions = false;
     
     
     @Converter

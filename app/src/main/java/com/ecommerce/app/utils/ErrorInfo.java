@@ -6,7 +6,11 @@ public enum ErrorInfo {
     USER_NOT_FOUND(1002, "Invalid credentials"),
     INCORRECT_PASSWORD(1003, "Incorrect password"), 
 	INVALID_MOBILE_NUMBER(1004, "Invalid mobile number"), 
-	INVALID_HOST_HEADER(1005, "Invalid host header");
+	INVALID_HOST_HEADER(1005, "Invalid host header"), 
+	USER_ALREADY_EXISTS(1006, "User already exists"), 
+	ROLE_NOT_FOUND(1007, "Role not found"), 
+	TOKEN_DOES_NOT_BELONG_TO_USER(1008, "Token does not belong to user"),
+	USER_NOT_ACTIVE(1009, "User not active");
 
 
 	private final Integer errorCode;
