@@ -1,18 +1,9 @@
 package com.ecommerce.app.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Date;
 import java.util.UUID;
-
+import java.time.LocalDateTime;
+import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import jakarta.persistence.Column;
@@ -23,6 +14,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "users")
@@ -31,6 +27,8 @@ import jakarta.persistence.JoinColumn;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends AuditModel {
+
+    private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -44,8 +42,8 @@ public class User extends AuditModel {
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "role_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
     
     @Column(name = "is_active", columnDefinition = "boolean default true")
@@ -57,24 +55,11 @@ public class User extends AuditModel {
     @Column(name = "email", unique = true, length = 100)
     private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_logged_in")
 	@JsonIgnore
-	private Date lastLoggedIn;
+	private LocalDateTime lastLoggedIn;
 
-    @Column(name = "address")
-    private String address;
-
-   @Column(name = "city", nullable = false, length = 100)
-   private String city;
-
-   @Column(name = "state", nullable = false, length = 100)
-   private String state;
-
-   @Column(name = "pincode", nullable = false, length = 6)
-   private String pincode;
-    
-    
-    
+    @Column(name = "address_updated", columnDefinition = "boolean default false")
+    private boolean addressUpdated;
     
 }

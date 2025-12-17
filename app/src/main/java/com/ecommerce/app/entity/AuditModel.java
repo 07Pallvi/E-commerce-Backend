@@ -2,6 +2,8 @@ package com.ecommerce.app.entity;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,35 +33,33 @@ public abstract class AuditModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", nullable = false, updatable = false)
 	@CreatedDate
 	@CreationTimestamp
-	protected Date createdAt;
+	protected LocalDateTime createdAt;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at", nullable = false, updatable = true)
 	@LastModifiedDate
 	@UpdateTimestamp
-	protected Date updatedAt;
+	protected LocalDateTime updatedAt;
 
-	public Date getCreatedAtIST() {
+	public LocalDateTime getCreatedAtIST() {
 		return convertToIST(this.createdAt);
 	}
 	
-	public Date getUpdatedAtIST() {
+	public LocalDateTime getUpdatedAtIST() {
 		return convertToIST(this.updatedAt);
 	}
 	
-	private Date convertToIST(Date date) {
+	private LocalDateTime convertToIST(LocalDateTime date) {
 		if (date == null) {
 			return null;
 		}
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
+		calendar.setTime(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()));
 		calendar.add(Calendar.HOUR_OF_DAY, 5);
 		calendar.add(Calendar.MINUTE, 30);
-		return calendar.getTime();
+		return date.atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 	
 	public String getCreatedAtISTFormatted() {
@@ -67,7 +67,7 @@ public abstract class AuditModel implements Serializable {
 			return null;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		return sdf.format(getCreatedAtIST());
+		return sdf.format(Date.from(getCreatedAtIST().atZone(ZoneId.systemDefault()).toInstant()));
 	}
 	
 	public String getUpdatedAtISTFormatted() {
@@ -75,6 +75,6 @@ public abstract class AuditModel implements Serializable {
 			return null;
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		return sdf.format(getUpdatedAtIST());
+		return sdf.format(Date.from(updatedAt.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 }

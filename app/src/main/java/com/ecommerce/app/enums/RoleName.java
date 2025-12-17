@@ -1,6 +1,5 @@
 package com.ecommerce.app.enums;
 
-
 public enum RoleName {
 
     ADMIN("ADMIN"),

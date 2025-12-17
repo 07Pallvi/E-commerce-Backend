@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.FetchType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -32,6 +33,11 @@ public class Seller extends AuditModel {
     @Column(name = "seller_id", updatable = false, nullable = false)
     private UUID sellerId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "company_name", nullable = false, length = 100)
     private String companyName;
 
@@ -41,10 +47,17 @@ public class Seller extends AuditModel {
     @Column(name = "company_email_id", nullable = false, length = 100)
     private String companyEmailId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "company_address", nullable = false, columnDefinition = "TEXT")
+    private String companyAddress;
+
+    @Column(name = "seller_code", nullable = false, length = 10)
+    private String sellerCode;
+
+    @Column(name = "is_active", columnDefinition = "boolean default true")
+    private boolean isActive;
+
+    @Column(name = "rating", nullable = false)
+    private double rating;
 
     @Column(name = "city", nullable = false, length = 100)
     private String city;
@@ -52,20 +65,7 @@ public class Seller extends AuditModel {
     @Column(name = "state", nullable = false, length = 100)
     private String state;
 
-    @Column(name = "pan_number", nullable = false, length = 10)
-    private String panNumber;
-    
     @Column(name = "pincode", nullable = false, length = 6)
-    private String pincode;
-
-    @Column(name = "seller_code", nullable = false, length = 10)
-    private String sellerCode;
-
-    @Column(name = "is_active", columnDefinition = "boolean default true")
-    private boolean isActive;
-    
-    @Column(name = "rating", nullable = false, precision = 2, scale = 1)
-    private double rating;
-    
+    private String pincode; 
     
 }

@@ -1,6 +1,7 @@
 package com.ecommerce.app.enums;
 
 public enum Permission {
+    
     READ("READ"),
     WRITE("WRITE"),
     DELETE("DELETE"),

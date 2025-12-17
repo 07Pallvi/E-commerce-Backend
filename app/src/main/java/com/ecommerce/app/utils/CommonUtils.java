@@ -2,12 +2,18 @@ package com.ecommerce.app.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.ecommerce.app.exception.ApiSuccess;
+import com.ecommerce.app.exception.EcomException;
+import com.ecommerce.app.security.ApiKeyAuthentication;
+import com.ecommerce.app.security.TokenAuthentication;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +25,8 @@ public class CommonUtils {
 	}
 
 	private static final Logger LOGGER = LogManager.getLogger(CommonUtils.class);
+
+	private static final String MOBILE_REGEX = "^\\d{10}$";
 
 
     public static ResponseEntity<Object> buildResponseEntity(ApiSuccess apiSuccess) {
@@ -68,6 +76,39 @@ public class CommonUtils {
 		} catch (JSONException ex) {
 			LOGGER.error("Error creating JSON log: {}", ex.getMessage());
 		}
+	}
+
+	public static void validateMandatoryField(String value, String field) throws EcomException {
+        if (value == null || value.isBlank()) {
+            throw new EcomException(field + " is required", ErrorInfo.INVALID_REQUEST.getErrorCode());
+        }
+    }
+
+    public static void validateMobileNumber(String mobile) throws EcomException {
+		if (!mobile.matches(MOBILE_REGEX)) {
+			throw new EcomException(ErrorInfo.INVALID_MOBILE_NUMBER.getErrorText(),
+					ErrorInfo.INVALID_MOBILE_NUMBER.getErrorCode());
+		}
+    }
+
+	public static String getRoleFromContext() {
+	    String role = null;
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth instanceof TokenAuthentication tokenAuthentication) {
+	        role = tokenAuthentication.getRole();
+	    }
+	    return role;
+	}
+
+	public static UUID getUserIdFromContext() {
+	    UUID userId = null;
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth instanceof TokenAuthentication tokenAuthentication) {
+	        userId = tokenAuthentication.getUserId();
+	    } else if (auth instanceof ApiKeyAuthentication apiKeyAuthentication) {
+	        userId = apiKeyAuthentication.getUserId();
+	    }
+	    return userId;
 	}
     
 }
